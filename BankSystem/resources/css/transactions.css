@@ -1,0 +1,20 @@
+.transaction {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.transaction p {
+    margin: 0;
+}
+
+.transaction-description {
+    font-weight: bold;
+}
+
+.transaction-details {
+    color: #999;
+    font-size: 0.8em;
+    margin-top: 5px;
+}
