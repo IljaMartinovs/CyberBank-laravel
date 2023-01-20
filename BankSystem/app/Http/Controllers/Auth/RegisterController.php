@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Account;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -32,7 +33,8 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+
+    protected string $redirectTo = '/accounts';
 
     /**
      * Create a new controller instance.
@@ -47,7 +49,7 @@ class RegisterController extends Controller
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
+     * @param array $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
@@ -56,13 +58,19 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'birth' => ['required', 'date', function ($attribute, $value, $fail) {
+                $birth_date = Carbon::createFromFormat('m/d/Y', $value)->toDateString();
+                if ($birth_date > Carbon::now()->subYears(18)->toDateString()) {
+                    $fail('You must be over 18 years old to register.');
+                }
+            }],
         ]);
     }
 
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
+     * @param array $data
      * @return \App\Models\User
      */
     protected function create(array $data): User
@@ -71,6 +79,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'birth_date' => $data['birth'],
         ]);
 
         $account = (new Account())->fill([
@@ -83,8 +92,8 @@ class RegisterController extends Controller
         $account->save();
 
         $counter = 1;
-        for ($i = 0; $i < 7; $i++) {
-            $code = strval(random_int(1000, 9999)); // Generate a random code
+        for ($i = 0; $i < 12; $i++) {
+            $code = strval(random_int(1000, 99999)); // Generate a random code
             $user->codeCards()->create(['code' => $code, 'code_number' => $counter]);
             $counter++;
         }

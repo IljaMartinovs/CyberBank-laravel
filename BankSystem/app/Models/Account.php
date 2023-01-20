@@ -17,6 +17,7 @@ class Account extends Model
         'currency'
     ];
 
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

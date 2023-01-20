@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CryptoCurrency extends Model
 {
+    private int $id;
     private string $symbols;
     private string $name;
     private string $price;
@@ -16,6 +17,7 @@ class CryptoCurrency extends Model
     private ?string $logoURL;
 
     public function __construct(
+        int $id,
         string $symbols,
         string $name,
         string $price,
@@ -26,6 +28,7 @@ class CryptoCurrency extends Model
     )
     {
         parent::__construct();
+        $this->id = $id;
         $this->symbols = $symbols;
         $this->name = $name;
         $this->price = $price;
@@ -33,6 +36,11 @@ class CryptoCurrency extends Model
         $this->percentChange24h = $percentChange24h;
         $this->percentChange7d = $percentChange7d;
         $this->logoURL = $logoURL;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     public function getSymbols(): string

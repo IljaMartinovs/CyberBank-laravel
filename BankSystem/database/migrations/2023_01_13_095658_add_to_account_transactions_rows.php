@@ -13,14 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('account_transactions', function (Blueprint $table) {
-            $table->id();
-            $table->string('from_account');
-            $table->string('to_account');
-            $table->integer('money');
-            $table->string('currency');
-            $table->string('description');
-            $table->timestamps();
+        Schema::table('account_transactions', function (Blueprint $table) {
+            $table->string('sender_name')->after('id');
+            $table->string('received_name')->after('from_account');
         });
     }
 
@@ -31,6 +26,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('account_transactions');
+        Schema::table('account_transactions_rows', function (Blueprint $table) {
+            //
+        });
     }
 };

@@ -17,78 +17,102 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+<div id="app">
+    <nav class="navbar navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a href="{{ url('/accounts') }}">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" width="100" height="100">
+            </a>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
-
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
-
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-
-
-                                <a class="dropdown-item" href="/accounts">
-                                    {{ __('Personal bank accounts') }}
-                                </a>
-
-                                <a class="dropdown-item" href="/crypto">
-                                    {{ __('Cryptocurrency') }}
-                                </a>
-
-                                <a class="dropdown-item" href="/code-cards">
-                                    {{ __('Code cards') }}
-                                </a>
-
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
+            <div class="text-center font-medium text-xl">
+                <span class="text-gray-600 animate-text">SECURE.</span>
+                <span class="text-gray-600 animate-text">CONVENIENT.</span>
+                <span class="text-gray-600 animate-text">ACCESSIBLE.</span>
             </div>
-        </nav>
 
-        <main class="py-4">
-            @yield('content')
-        </main>
-    </div>
+            <div class="text-center">
+
+                @guest
+                    @if (Route::has('login'))
+                        <a href="/login">
+                            <button
+                                class="bg-gray-600 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md mx-auto my-4">
+                                Login
+                            </button>
+                        </a>
+                    @endif
+
+                    @if (Route::has('register'))
+                            <a href="/register">
+                                <button
+                                    class="bg-gray-600 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md mx-auto my-4">
+                                    Register
+                                </button>
+                            </a>
+                    @endif
+                @else
+
+
+                <a href="/accounts">
+                    <button
+                        class="bg-gray-600 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md mx-auto my-4 ">
+                        Accounts
+                    </button>
+                </a>
+
+                    <a href="/balance-transfer">
+                        <button
+                            class="bg-gray-600 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md mx-auto my-4 ">
+                            Transfer
+                        </button>
+                    </a>
+
+                <a href="/crypto-wallet">
+                    <button
+                        class="bg-gray-600 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md mx-auto my-4 ">
+                        Crypto Wallet
+                    </button>
+                </a>
+
+                <a href="/crypto">
+                    <button
+                        class="bg-gray-600 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md mx-auto my-4">
+                        Cryptocurrency
+                    </button>
+                </a>
+
+                <a href="/code-cards">
+                    <button
+                        class="bg-gray-600 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md mx-auto my-4">
+                        Code Cards
+                    </button>
+                </a>
+
+                    <button
+                        class="bg-gray-600 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md mx-auto my-4"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                    >
+                        Logout
+                    </button>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
+                @endguest
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- Left Side Of Navbar -->
+                <ul class="navbar-nav me-auto">
+
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+{{--    <main class="py-4">--}}
+    <main>
+        @yield('content')
+    </main>
+</div>
 </body>
 </html>

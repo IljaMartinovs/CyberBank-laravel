@@ -13,10 +13,13 @@ class Transaction extends Model
 
     protected $fillable = [
         'user_id',
+        'sender_name',
         'from_account',
+        'received_name',
         'to_account',
         'money',
         'currency',
+        'details',
         'description'
     ];
 }

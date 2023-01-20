@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class CodeCardController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $user = Auth::user();
         $codeCards = $user->codeCards;
 
-        // Return the code cards
         return view('code-card',
             compact('codeCards')
         );
