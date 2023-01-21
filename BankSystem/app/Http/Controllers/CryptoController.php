@@ -34,11 +34,14 @@ class CryptoController extends Controller
         return view('index', ['crypto' => $cryptoCurrencies->all()]);
     }
 
-    public function buyCrypto(Request $request): RedirectResponse
+    public function cryptoTransaction(Request $request, string $action): RedirectResponse
     {
-
         $request->validate([
-            'quantity_buy' => 'required|numeric|min:0.001',
+            'amount_buy' => ($action === 'buy') ? 'required|numeric|min:0.001' : 'nullable',
+            'amount_sell' => ($action === 'sell') ? 'required|numeric|min:0.001' : 'nullable',
+        ], [
+            'amount_buy.required' => 'You need to input the Quantity to Buy',
+            'amount_sell.required' => 'You need to input the Quantity to Sell'
         ]);
 
         $fromAccount = $this->fetchUserAccount($request);
@@ -46,55 +49,27 @@ class CryptoController extends Controller
             abort(403);
         }
 
-        $rate = 1.00;
-
-        $currencies = Cache::get('currencies');
-        if ($fromAccount->currency !== 'EUR') {
-            $rates = array_column($currencies, 'rate', 'name');
-            $rate = $rates[$fromAccount->currency];
-        }
-
-        $userAccount = $request['from_account'];
+        $rate = $this->calculateRate($fromAccount);
         $symbol = $request['symbol'];
-        $userId = $fromAccount->user_id;
-        $userMoney = $fromAccount->money / 100;
-        $number = $fromAccount->number;
-        $amount = $request['quantity_buy'];
-        $currency = $fromAccount->currency;
+        $amount = ($action === 'buy') ? $request->input('amount_buy') : $request->input('amount_sell');
 
-        $this->cryptoService->buyCrypto($userId, $userAccount, $userMoney, $number, $symbol, $amount, $rate, $currency);
-
+        if ($action === 'buy') {
+            $this->cryptoService->buyCrypto($symbol, $amount, $rate, $fromAccount);
+        } else {
+            $this->cryptoService->sellCrypto($symbol, $amount, $rate, $fromAccount);
+        }
         return redirect()->back();
     }
 
-    public function sellCrypto(Request $request): RedirectResponse
+    private function calculateRate($fromAccount): float
     {
-        $request->validate([
-            'quantity_sell' => 'required|numeric|min:0.001',
-        ]);
-
-        $fromAccount = $this->fetchUserAccount($request);
-        if ($fromAccount->user_id !== Auth::id()) {
-            abort(403);
-        }
-
         $rate = 1.00;
-
         $currencies = Cache::get('currencies');
         if ($fromAccount->currency !== 'EUR') {
             $rates = array_column($currencies, 'rate', 'name');
             $rate = $rates[$fromAccount->currency];
         }
-
-        $symbol = $request['symbol'];
-        $userAccount = $request['from_account'];
-        $userId = $fromAccount->user_id;
-        $number = $fromAccount->number;
-        $amount = $request['quantity_sell'];
-        $currency = $fromAccount->currency;
-
-       $this->cryptoService->sellCrypto($userId, $userAccount, $number, $symbol, $amount, $rate,$currency);
-        return redirect()->back();
+        return $rate;
     }
 
     private function fetchUserAccount(Request $request): Account

@@ -6,7 +6,6 @@ use App\Models\Account;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use App\Services\AccountService;
-use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

@@ -6,12 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
+    public function up(): void
     {
         Schema::table('account_transactions', function (Blueprint $table) {
             $table->string('sender_name')->after('id');
@@ -19,15 +14,11 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
+    public function down(): void
     {
         Schema::table('account_transactions_rows', function (Blueprint $table) {
-            //
+            $table->string('sender_name')->after('id');
+            $table->string('received_name')->after('from_account');
         });
     }
 };

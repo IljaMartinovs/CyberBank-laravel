@@ -7,11 +7,14 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>CyberBank</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
@@ -43,22 +46,28 @@
                     @endif
 
                     @if (Route::has('register'))
-                            <a href="/register">
-                                <button
-                                    class="bg-gray-600 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md mx-auto my-4">
-                                    Register
-                                </button>
-                            </a>
+                        <a href="/register">
+                            <button
+                                class="bg-gray-600 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md mx-auto my-4">
+                                Register
+                            </button>
+                        </a>
                     @endif
+
+                    <a href="/crypto">
+                        <button
+                            class="bg-gray-600 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md mx-auto my-4">
+                            Crypto
+                        </button>
+                    </a>
                 @else
 
-
-                <a href="/accounts">
-                    <button
-                        class="bg-gray-600 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md mx-auto my-4 ">
-                        Accounts
-                    </button>
-                </a>
+                    <a href="/accounts">
+                        <button
+                            class="bg-gray-600 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md mx-auto my-4 ">
+                            Accounts
+                        </button>
+                    </a>
 
                     <a href="/balance-transfer">
                         <button
@@ -67,26 +76,26 @@
                         </button>
                     </a>
 
-                <a href="/crypto-wallet">
-                    <button
-                        class="bg-gray-600 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md mx-auto my-4 ">
-                        Crypto Wallet
-                    </button>
-                </a>
+                    <a href="/crypto-wallet">
+                        <button
+                            class="bg-gray-600 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md mx-auto my-4 ">
+                            Crypto Wallet
+                        </button>
+                    </a>
 
-                <a href="/crypto">
-                    <button
-                        class="bg-gray-600 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md mx-auto my-4">
-                        Cryptocurrency
-                    </button>
-                </a>
+                    <a href="/crypto">
+                        <button
+                            class="bg-gray-600 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md mx-auto my-4">
+                            Cryptocurrency
+                        </button>
+                    </a>
 
-                <a href="/code-cards">
-                    <button
-                        class="bg-gray-600 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md mx-auto my-4">
-                        Code Cards
-                    </button>
-                </a>
+                    <a href="/code-cards">
+                        <button
+                            class="bg-gray-600 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md mx-auto my-4">
+                            Code Cards
+                        </button>
+                    </a>
 
                     <button
                         class="bg-gray-600 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md mx-auto my-4"
@@ -109,7 +118,6 @@
             </div>
         </div>
     </nav>
-{{--    <main class="py-4">--}}
     <main>
         @yield('content')
     </main>

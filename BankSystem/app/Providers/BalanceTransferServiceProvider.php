@@ -8,11 +8,6 @@ use Illuminate\Support\ServiceProvider;
 
 class BalanceTransferServiceProvider extends ServiceProvider
 {
-    /**
-     * Register services.
-     *
-     * @return void
-     */
     public function register()
     {
         $this->app->bind(BalanceTransferService::class, function ($app) {
@@ -20,11 +15,6 @@ class BalanceTransferServiceProvider extends ServiceProvider
         });
     }
 
-    /**
-     * Bootstrap services.
-     *
-     * @return void
-     */
     public function boot()
     {
         //

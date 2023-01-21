@@ -6,27 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
+    public function up(): void
     {
         Schema::table('owned_crypto_currencies', function (Blueprint $table) {
             $table->float('current_price_per_one')->after('price_per_one')->nullable();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
+    public function down(): void
     {
         Schema::table('owned_crypto_currencies', function (Blueprint $table) {
-            //
+            $table->float('current_price_per_one')->after('price_per_one')->nullable();
         });
     }
 };

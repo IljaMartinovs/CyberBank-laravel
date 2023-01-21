@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+
 use App\Models\Account;
 use App\Models\Crypto;
 use App\Models\CryptoCurrency;
@@ -33,7 +34,6 @@ class CryptoService
 
     public function getCrypto($symbol, $symbols): Collection
     {
-
         $response = $this->fetch($symbols, $symbol);
         $cryptoCurrencies = collect();
         $info = $this->fetch($symbols, $symbol, 'info');
@@ -54,28 +54,23 @@ class CryptoService
         return $cryptoCurrencies;
     }
 
-    public function buyCrypto(int $userId, string $userAccount, int $money, string $number, string $symbol, float $amount, ?float $rate, ?string $currency): RedirectResponse
+    public function buyCrypto(string $symbol, float $amount, float $rate, Account $fromAccount): RedirectResponse
     {
-        $user = Account::where('user_id', $userId)->where('number', $userAccount)->firstOrFail();
-
         $response = $this->fetch([], $symbol);
         $actualPrice = $response->data->$symbol->quote->USD->price;
         $userPrice = $actualPrice * $amount;
         $trade = 'bought';
 
+        if ($userPrice > $fromAccount->money / 100)
+          return redirect()->back()->with('error', "Transaction Declined. Not Enough Balance.");
 
-
-
-        if ($userPrice > $money)
-            return redirect()->back()->with('error', "Transaction Declined. Not Enough Balance.");
-
-        $crypto = Crypto::firstOrNew(['user_id' => $userId, 'number' => $userAccount, 'symbol' => $symbol]);
-        if($crypto->exists){
+        $crypto = Crypto::firstOrNew(['user_id' => $fromAccount->user_id, 'number' => $fromAccount->number, 'symbol' => $symbol]);
+        if ($crypto->exists) {
             $crypto->amount += $amount;
-            $crypto->price_per_one = ($crypto->price_per_one*$crypto->amount + $actualPrice*$amount)/($crypto->amount + $amount);
-        }else{
-            $crypto->user_id = $userId;
-            $crypto->number = $number;
+            $crypto->price_per_one = ($crypto->price_per_one * $crypto->amount + $actualPrice * $amount) / ($crypto->amount + $amount);
+        } else {
+            $crypto->user_id = $fromAccount->user_id;
+            $crypto->number = $fromAccount->number;
             $crypto->symbol = $symbol;
             $crypto->amount = $amount;
             $crypto->price_per_one = $actualPrice;
@@ -83,22 +78,19 @@ class CryptoService
             $crypto->trade = 'owned';
         }
         $crypto->save();
-
-        $this->saveTransaction($userId, $number, $symbol, $amount, $actualPrice, $trade);
+        $this->saveTransaction($fromAccount->user_id, $fromAccount->number, $symbol, $amount, $actualPrice, $trade);
 
         $userPrice *= $rate;
-        $user->money -= intval($userPrice * 100);
-        $user->save();
+        $fromAccount->money -= intval($userPrice * 100);
+        $fromAccount->save();
 
-        return redirect()->back()->with('success', "you bought $amount of $symbol for $userPrice$currency");
+        return redirect()->back()->with('success', "you bought $amount of $symbol for $userPrice$fromAccount->currency");
     }
 
-    public function sellCrypto(int $userId, string $userAccount, string $number, string $symbol, float $amount, ?float $rate, ?string $currency): RedirectResponse
+    public function sellCrypto(string $symbol, float $amount, float $rate, Account $fromAccount): RedirectResponse
     {
-        $user = Account::where('user_id', $userId)->where('number', $userAccount)->firstOrFail();
-
-        $crypto = Crypto::where('user_id', $userId)
-            ->where('number', $number)
+        $crypto = Crypto::where('user_id', $fromAccount->user_id)
+            ->where('number', $fromAccount->number)
             ->where('symbol', $symbol)
             ->where('trade', 'owned')
             ->first();
@@ -123,13 +115,13 @@ class CryptoService
         else
             $crypto->save();
 
-        $this->saveTransaction($userId, $number, $symbol, $amount, $actualPrice, $trade);
+        $this->saveTransaction($fromAccount->user_id, $fromAccount->number, $symbol, $amount, $actualPrice, $trade);
 
         $userPrice *= $rate;
-        $user->money += intval($userPrice * 100);
-        $user->save();
+        $fromAccount->money += intval($userPrice * 100);
+        $fromAccount->save();
 
-        return redirect()->back()->with('success', "you sold $amount of $symbol for $userPrice$currency");
+        return redirect()->back()->with('success', "you sold $amount of $symbol for $userPrice$fromAccount->currency");
     }
 
     private function fetch(array $symbols, ?string $single, string $url = 'quotes/latest'): stdClass

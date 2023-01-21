@@ -11,17 +11,15 @@ use Illuminate\Support\Facades\Cache;
 
 class BalanceTransferService
 {
-
-    public function transfer(Request $request): void
+    public function transfer(Account $fromAccount,
+                             Account $toAccount,
+                             string  $amount,
+                             string  $details): void
     {
-        $fromAccount = Account::findOrFail($request->get('from_account'));
-
         $currencies = Cache::get('currencies');
-        $amount = $request->get('amount') * 100;
-        $toAccount = Account::where('number', $request->get('to_account'))->firstOrFail();
-
+        $amountFromRequest = $amount;
+        $amount *= 100;
         $toUser = User::find($toAccount->user_id);
-
 
         //CHECK CURRENCIES
         $toExchangeRate = $fromExchangeRate = 1;
@@ -37,7 +35,7 @@ class BalanceTransferService
         $amount *= $exchangeRate;
 
         //UPDATE MONEY
-        $fromAccount->money -= $request->get('amount') * 100;
+        $fromAccount->money -= $amountFromRequest * 100;
         $fromAccount->save();
 
         $toAccount->money += $amount;
@@ -49,9 +47,9 @@ class BalanceTransferService
             'from_account' => $fromAccount->number,
             'received_name' => $toUser->name,
             'to_account' => $toAccount->number,
-            'money' => $request->get('amount') * 100,
+            'money' => $amountFromRequest * 100,
             'currency' => $fromAccount->currency,
-            'details' => $request->input('details'),
+            'details' => $details,
             'description' => 'SENT'
         ]);
 
@@ -62,7 +60,7 @@ class BalanceTransferService
             'to_account' => $fromAccount->number,
             'money' => $amount,
             'currency' => $toAccount->currency,
-            'details' => $request->input('details'),
+            'details' => $details,
             'description' => 'RECEIVED'
         ]);
     }

@@ -2,23 +2,6 @@
 
 @section('content')
 
-{{--    <div class="container">--}}
-{{--        <div class="row justify-content-center">--}}
-{{--            <div class="col-md-8">--}}
-{{--                <div class="card">--}}
-{{--                    <div class="card-header">{{ __('Code cards') }}</div>--}}
-
-{{--                    <div class="card-body">--}}
-{{--                        <ol>--}}
-{{--                            @foreach ($codeCards as $codeCard)--}}
-{{--                               {{ $loop->iteration }}. {{ $codeCard->code }}<br>--}}
-{{--                            @endforeach--}}
-{{--                        </ol>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </div>--}}
 <div class="bg-white rounded-lg p-4">
     <div class="text-lg font-medium text-center mb-2">Code Card</div>
     <div class="flex flex-wrap -mx-2">

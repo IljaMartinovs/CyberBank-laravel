@@ -6,27 +6,22 @@ use App\Http\Controllers\CodeCardController;
 use App\Http\Controllers\CryptoController;
 use App\Http\Controllers\CryptoTransactionController;
 use App\Http\Controllers\CryptoWalletController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserTransactionController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/', [HomeController::class, 'index']);
-
-
+Route::get('/', [AccountController::class, 'show'])->middleware(['auth'])->name('accounts.show');
 
 Route::get('/crypto', [CryptoController::class, 'index'])->name('crypto.index');
-Route::post('/crypto/{symbol}/buy', [CryptoController::class, 'buyCrypto'])->middleware(['auth'])->name('crypto.buy');
-Route::post('/crypto/{symbol}/sell', [CryptoController::class, 'sellCrypto'])->middleware(['auth'])->name('crypto.sell');
+Route::post('/crypto/{action}/{symbol}', [CryptoController::class, 'cryptoTransaction'])->middleware(['auth'])->name('cryptoTransaction');
 
 Route::get('/transactions/{account}', [UserTransactionController::class, 'index'])->middleware(['auth'])->name('transaction.index');
 Route::post('/transactions/{account}', [UserTransactionController::class, 'filterTransactions'])->middleware(['auth'])->name('transaction.filter');
 
 Route::get('/crypto-transactions/{account}', [CryptoTransactionController::class, 'index'])->middleware(['auth'])->name('crypto-transaction.index');
 Route::post('/crypto-transactions/{account}', [CryptoTransactionController::class, 'filterCryptoTransactions'])->middleware(['auth'])->name('crypto-transaction.filter');
-
 
 Route::get('/crypto-wallet', [CryptoWalletController::class, 'index'])->middleware(['auth'])->name('crypto.wallet');
 
@@ -39,7 +34,4 @@ Route::post('/accounts/{account}',[AccountController::class, 'delete'])->middlew
 Route::get('/balance-transfer', [BalanceTransferController::class, 'show'])->middleware(['auth'])->name('balance-transfer.update');
 Route::post('/balance-transfer', [BalanceTransferController::class, 'transfer'])->middleware(['auth'])->name('balance-transfer.transfer');
 
-Route::get('/code-cards', [CodeCardController::class, 'index'])
-    ->middleware(['auth'])
-    ->name('code-cards.index');
-
+Route::get('/code-cards', [CodeCardController::class, 'index'])->middleware(['auth'])->name('code-cards.index');

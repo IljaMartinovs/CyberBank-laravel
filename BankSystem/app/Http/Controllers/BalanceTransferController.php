@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Account;
-use App\Models\Transaction;
 use App\Services\BalanceTransferService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -33,9 +32,11 @@ class BalanceTransferController extends Controller
     public function transfer(Request $request): RedirectResponse
     {
         $fromAccount = Account::findOrFail($request->get('from_account'));
+
         if ($fromAccount->user_id !== Auth::id()) {
             abort(403);
         }
+
 
         Validator::extend('password_match', function($attribute, $value) {
             return Hash::check($value, auth()->user()->password);
@@ -61,7 +62,12 @@ class BalanceTransferController extends Controller
             }]
         ]);
 
-        $this->balanceTransferService->transfer($request);
+        $toAccount = Account::where('number', $request->get('to_account'))->firstOrFail();
+        $amount = $request->get('amount');
+        $details = $request->get('details');
+
+        $this->balanceTransferService->transfer($fromAccount,$toAccount,$amount,$details);
+//        $this->balanceTransferService->transfer($request);
         return redirect()->back()->with('success', "you successfully sent money");
     }
 }

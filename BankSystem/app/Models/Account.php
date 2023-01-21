@@ -17,14 +17,8 @@ class Account extends Model
         'currency'
     ];
 
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function getBalanceFormatted(): string
-    {
-        return number_format($this->money / 100,2);
     }
 }
