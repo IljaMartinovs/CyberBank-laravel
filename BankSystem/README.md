@@ -1,4 +1,35 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Cyber Bank - bank and crypto trading platform
+## Info
+Features include :
+* Creating multiple wallets with different currencies: You can create as many wallets as you need, each with a specific currency. This allows you to easily manage and track your funds in different currencies.
+* Money transfers: You can transfer money between your wallets or to other users on the platform.
+* Buying and selling crypto: You can easily buy and sell a variety of cryptocurrencies directly from your account.
+* Compliance with all validations: ensures compliance with all relevant banking regulations and validation processes to ensure the safety and security of your personal and financial information.
+## GIFs
+### Login and registration
+![bMYC7Wewz1](https://user-images.githubusercontent.com/106473441/214003553-25828b05-75a7-42cf-825a-e1d7c2c307de.gif)
+### Buy Sell cryptocurrencies
+![BUY_SELL](https://user-images.githubusercontent.com/106473441/214004104-fdb5cb31-ef38-471d-807e-e4b23a00280c.gif)
+### Transfer money
+![TRANSFER_MONEY](https://user-images.githubusercontent.com/106473441/214004197-c83de24c-a5fd-44d5-b6b5-772d769961ae.gif)
+### Transaction history
+![TRANSACTIONS_HISTORY](https://user-images.githubusercontent.com/106473441/214004240-8fec73e0-9c65-4559-846b-eee99c8f8da6.gif)
+### Edit
+![EDIT](https://user-images.githubusercontent.com/106473441/214004274-c4bee950-4e7f-465a-ba57-a586c1a6667f.gif)
+## Run a project : 
+* Make sure you have all the necessary dependencies and packages installed, including PHP, Composer, and Node.js.
+* Clone the project from the repository to your local machine.
+* Open the terminal and navigate to the project's root directory.
+* Rename the .env.example file to .env and update the necessary information like database credentials, API_KEY from https://coinmarketcap.com/api/.
+* Run the command composer install to install all the required PHP packages for the project.
+* Run the command npm install to install all the required Node packages for the project.
+* Run the command php artisan migrate to run all the migrations and set up the database.
+* Run the command npm run dev to compile the front-end assets.
+* Run the command php artisan serve to start the local development server.
+
+ 
+
+<!-- <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
 <a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
@@ -64,3 +95,4 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+ -->
